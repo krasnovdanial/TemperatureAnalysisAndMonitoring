@@ -13,7 +13,7 @@ st.set_page_config(page_title="Weather Anomaly Detection", layout="wide")
 st.title("Анализ температурных аномалий")
 
 st.sidebar.header("1. Данные")
-uploaded_file = st.sidebar.file_uploader("Загрузите CSV с историей", type=["csv"])
+uploaded_file = st.sidebar.file_uploader("Загрузите CSV с данными", type=["csv"])
 
 if uploaded_file is not None:
     df = load_weather_data(uploaded_file)
@@ -135,7 +135,7 @@ if uploaded_file is not None:
 
                         elif result["error"] == 401:
                             st.error(
-                                '{"cod":401, "message": "Invalid API key. See https://openweathermap.org/faq#error401"}')
+                                '{"cod":401, "message": "Invalid API key. Please see https://openweathermap.org/faq#error401"}')
                         else:
                             st.error(f"Ошибка API {result['error']}: {result['message']}")
 

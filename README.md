@@ -1,21 +1,18 @@
-# Weather Analysis & Monitoring System
+# Система анализа и мониторинга погоды
 
-An interactive tool for analyzing historical temperature trends and monitoring current weather anomalies using
-OpenWeatherMap API. Built with Python and Streamlit.
+### Интерактивный инструмент для анализа исторических температурных трендов и мониторинга текущих погодных аномалий с использованием API OpenWeatherMap. Разработан на Python и Streamlit.
 
-- Added an interface for uploading a file with historical data.
-- Added an interface for selecting a city (from a dropdown list).
-- Added a form for entering the OpenWeatherMap API key. When it is not entered, current weather data should not be
-  displayed. If the key is invalid, display an error on the screen (it should return {"cod":401, "message": "Invalid API
-  key. Please see https://openweathermap.org/faq#error401 for more info."}).
+- Добавлен интерфейс для загрузки файла с историческими данными.
+- Добавлен интерфейс для выбора города (из выпадающего списка).
+- Добавлена форма для ввода API-ключа OpenWeatherMap. Если ключ не введен, данные о текущей погоде не отображаются. Если ключ некорректен, на экран выводится ошибка (возвращается ответ: {"cod":401, "message": "Invalid API key. Please see https://openweathermap.org/faq#error401 for more info."}).
 
-### Display:
+### Отображение данных:
 
-- Added descriptive statistics for the city's historical data.
-- A temperature time series with anomalies highlighted.
-- Seasonal profiles indicating the mean and standard deviation.
+- Добавлена описательная статистика по историческим данным города.
+- Временной ряд температур с выделением аномалий.
+- Сезонные профили с указанием среднего значения и стандартного отклонения.
 
-### Installation & Setup
+### Установка и настройка
 
 > git clone https://github.com/krasnovdanial/TemperatureAnalysisAndMonitoring.git
 
