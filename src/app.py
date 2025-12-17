@@ -5,7 +5,7 @@ import aiohttp
 import plotly.graph_objects as go
 import streamlit as st
 
-from analysis import load_weather_data, calculate_season_stats, check_anomaly
+from analysis import calculate_season_stats, check_anomaly, load_data_cached, calculate_trend
 from src.weather_api import get_weather_async
 from utils.utils import get_season
 
@@ -16,7 +16,7 @@ st.sidebar.header("1. Данные")
 uploaded_file = st.sidebar.file_uploader("Загрузите CSV с данными", type=["csv"])
 
 if uploaded_file is not None:
-    df = load_weather_data(uploaded_file)
+    df = load_data_cached(uploaded_file)
 
     st.sidebar.header("2. Выбор города")
     cities = df['city'].unique()
@@ -67,8 +67,12 @@ if uploaded_file is not None:
 
         try:
             st.plotly_chart(fig, width="stretch")
-        except:
+        except Exception:
             st.plotly_chart(fig, use_container_width=True)
+        trend_val = calculate_trend(city_data)
+        col_trend, col_none = st.columns([1, 3])
+        if trend_val is not None:
+            col_trend.metric("Глобальный тренд", f"{trend_val:.2f} °C/год")
 
         st.write("### Описательная статистика")
         st.dataframe(city_data['temperature'].describe().T)
