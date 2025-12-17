@@ -1,9 +1,11 @@
 import os
 import sys
+from pathlib import Path
 
 import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.linear_model import LinearRegression
+import streamlit as st
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(current_dir)
@@ -13,7 +15,12 @@ if project_root not in sys.path:
 from utils.utils import get_season
 
 
-def load_weather_data(filepath):
+@st.cache_data
+def load_data_cached(uploaded_file):
+    return load_weather_data(uploaded_file)
+
+
+def load_weather_data(filepath: Path):
     df = pd.read_csv(filepath)
 
     if 'timestamp' in df.columns:
@@ -25,13 +32,13 @@ def load_weather_data(filepath):
     return df
 
 
-def calculate_season_stats(df):
+def calculate_season_stats(df: pd.DataFrame):
     stats = df.groupby(['city', 'season'])['temperature'].agg(['mean', 'std']).reset_index()
     stats.rename(columns={'mean': 'mean_temperature', 'std': 'std_temperature'}, inplace=True)
     return stats
 
 
-def check_anomaly(city, current_temp, profiles, current_season):
+def check_anomaly(city: str, current_temp: float, profiles: pd.DataFrame, current_season: str):
     row = profiles[(profiles['city'] == city) & (profiles['season'] == current_season)]
 
     if row.empty:
@@ -48,7 +55,7 @@ def check_anomaly(city, current_temp, profiles, current_season):
     return is_normal, lower, upper
 
 
-def calculate_trend(df_city):
+def calculate_trend(df_city: pd.DataFrame):
     temp_df = df_city.dropna(subset=['temperature'])
     if temp_df.empty:
         return 0.0
@@ -75,7 +82,7 @@ def calculate_trend(df_city):
     return model.coef_[0] * 365
 
 
-def analyze_city_data(df_city):
+def analyze_city_data(df_city: pd.DataFrame):
     df = df_city.copy()
 
     if 'date' in df.columns:
@@ -96,6 +103,7 @@ def analyze_city_data(df_city):
 
 
 def temperature_trend_plot(city_name: str, full_data: pd.DataFrame):
+    full_data = full_data.copy()
     name = city_name.title()
     city_data = full_data[full_data['city'] == name]
 
